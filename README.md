@@ -68,3 +68,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Notes
+
+- firebase.js file has secrets in it. you should remove the secrets, and load them in from a .env file for security
+- logic for if sign up without avatar
+- add linter
+- move images out of src
