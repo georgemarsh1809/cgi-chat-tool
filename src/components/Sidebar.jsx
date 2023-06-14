@@ -1,6 +1,6 @@
 import React from 'react'
-import NavBar from './NavBar';
-import Search from './Search';
+import NavBar from './NavBar'
+import Search from './Search'
 import Chats from './Chats'
 
 const Sidebar = () => {
@@ -13,4 +13,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar;
+export default Sidebar

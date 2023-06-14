@@ -1,4 +1,4 @@
-    import React, { useContext, useState } from 'react';
+    import React, { useContext, useState } from 'react'
     import { 
       collection,
       getDocs, 
@@ -9,37 +9,36 @@
       where, 
       doc, 
       getDoc, 
-      getDocFromServer
-    } from "firebase/firestore";
-    import { db } from "../firebase";
-    import { AuthContext } from "../context/AuthContext";
+    } from 'firebase/firestore'
+    import { db } from '../firebase'
+    import { AuthContext } from '../context/AuthContext'
 
     const Search = () => {
  
-      const [username, setUsername] = useState("");
-      const [user, setUser] = useState(null);
-      const [err, setErr] = useState(null);
+      const [username, setUsername] = useState('')
+      const [user, setUser] = useState(null)
+      const [err, setErr] = useState(null)
 
-      const { currentUser } = useContext(AuthContext);
+      const { currentUser } = useContext(AuthContext)
 
       const handleSearch = async () => {
         const q = query(
-          collection(db, "users"), 
-          where ("displayName", "==", username)
-          );
+          collection(db, 'users'), 
+          where ('displayName', '==', username)
+          )
 
           try {            
-            const querySnapshot = await getDocs(q);
+            const querySnapshot = await getDocs(q)
             querySnapshot.forEach((doc) => {
-              setUser(doc.data());
-            });  
+              setUser(doc.data())
+            })  
           } catch (err) {
             setErr(true)
           }
       }
 
       const handleKey = (e) => {
-        e.code === "Enter" && handleSearch();
+        e.code === 'Enter' && handleSearch()
       }
 
       const handleSelect = async () => {
@@ -47,39 +46,41 @@
         const combinedId = 
           currentUser.uid > user.uid 
           ? currentUser.uid + user.uid 
-          : user.uid + currentUser.uid;
+          : user.uid + currentUser.uid
 
         try {
-          const res = await getDoc(doc(db, "chats", combinedId));
+          const res = await getDoc(doc(db, 'chats', combinedId))
 
           if (!res.exists()) {
             //create chat in chats collection
-            await setDoc(doc(db, "chats", combinedId), { messages:[] });
+            await setDoc(doc(db, 'chats', combinedId), { messages:[] })
             
             //create user chats
-            await updateDoc(doc(db, "userChats", currentUser.uid), {
-              [combinedId+".userInfo"]:{
+            await updateDoc(doc(db, 'userChats', currentUser.uid), {
+              [combinedId+'.userInfo']:{
                 uid:user.uid,
                 displayName: user.displayName,
                 photoURL: user.photoURL
               },
-              [combinedId+".date"]: serverTimestamp()
-            });
+              [combinedId+'.date']: serverTimestamp()
+            })
 
-            await updateDoc(doc(db, "userChats", user.uid), {
-              [combinedId+".userInfo"]:{
+            await updateDoc(doc(db, 'userChats', user.uid), {
+              [combinedId+'.userInfo']:{
                 uid:currentUser.uid,
                 displayName: currentUser.displayName,
                 photoURL: currentUser.photoURL
               },
-              [combinedId+".date"]:serverTimestamp()
+              [combinedId+'.date']:serverTimestamp()
             })
             }
-          } catch (err) {}
+          } catch (err) {
+            console.error(err)
+          }
 
           setUser(null)
-          setUsername("");
-      };
+          setUsername('')
+      }
 
 
       return (
@@ -106,5 +107,5 @@
       )
     } 
 
-    export default Search;
+    export default Search
     

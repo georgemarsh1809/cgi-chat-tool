@@ -1,3 +1,5 @@
+# in the npm install if you a load of deprecations or warnings, dont worry. its normal. as long as there isnt any `critical` ones.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

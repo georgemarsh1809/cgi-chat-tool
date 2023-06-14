@@ -1,10 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import { AuthContextProvider } from './context/AuthContext';
-import { ChatContext, ChatContextProvider } from './context/ChatContext';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import App from './App'
+import { AuthContextProvider } from './context/AuthContext'
+import { ChatContextProvider } from './context/ChatContext'
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+// context providers are wrapped around the app component to provide the context (state of the auth, chat) to all the components in the app
 root.render(
   <AuthContextProvider>
     <ChatContextProvider>
@@ -13,4 +16,4 @@ root.render(
       </React.StrictMode>
     </ChatContextProvider>
   </AuthContextProvider>
-);
+)

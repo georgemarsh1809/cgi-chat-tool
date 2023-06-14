@@ -1,26 +1,25 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import React, { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebase'
 
 const Login = () => {
 
-    const [err, setErr] = useState(false);
-    const navigate = useNavigate();
+    const [err, setErr] = useState(false)
+    const navigate = useNavigate()
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const email = e.target[0].value;
-        const password = e.target[1].value;
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        const [[{value: email}], [{value: password}]] = event.target
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(auth, email, password)
             navigate('/')
-            console.log("Logged in")
+            console.log('Logged in')
         } catch (err) {
-            setErr(true);
+            setErr(true)
         }
-    };
+    }
 
 
 
@@ -35,11 +34,13 @@ const Login = () => {
                     <button>Sign In</button>
                     {err && <span>Something went wrong...</span>}
                 </form>
-                <p>You don't have an account? <Link to="/register">Register</Link></p>
+                {/* need to escape special characters, for big apps u have a full solution to write your copy and store localisation (changing the text for language requested by the browser) */}
+                {/* `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;` */}
+                <p>You don&apos;t have an account? <Link to="/register">Register</Link></p>
             </div>
 
         </div>
     )
 }
 
-export default Login;
+export default Login

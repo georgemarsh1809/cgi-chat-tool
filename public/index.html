@@ -3,10 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- meta tag description is what google will show -->
     <meta
       name="description"
       content="Web site created using create-react-app"
     />
+    <!-- pick a google font for compatibility -->
+    <!-- https://fonts.google.com/?preview.text=chat%20app&preview.text_type=custom -->
+    <!-- update the style tag with the name from the family query parameter -> family=Open+Sans -->
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -17,10 +21,13 @@
         margin: 0;
       }
     </style>
+    <!-- The name of the page. Shows up on the browser tab -->
     <title>React App</title>
   </head>
   <body>
+    <!-- if they dont have javascript, they are viweing on a nokia brick -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- the tag where the root react component is mounted in the src/index (startup) file -->
     <div id="root"></div>
   </body>
 </html>
