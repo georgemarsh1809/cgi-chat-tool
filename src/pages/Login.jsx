@@ -4,21 +4,19 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
 const Login = () => {
-
-    const [err, setErr] = useState(false);
+    const [error, setError] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const email = e.target[0].value;
-        const password = e.target[1].value;
+    const handleSubmit = async (error) => {
+        error.preventDefault();
+        const {target: [email, password]} = error
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
             navigate('/')
             console.log("Logged in")
         } catch (err) {
-            setErr(true);
+            setError(true);
         }
     };
 
@@ -33,13 +31,13 @@ const Login = () => {
                     <input type="email" placeholder="Email"/>
                     <input type="password" placeholder="Password"/>
                     <button>Sign In</button>
-                    {err && <span>Something went wrong...</span>}
+                    {error && <span>Something went wrong...</span>}
                 </form>
                 <p>You don't have an account? <Link to="/register">Register</Link></p>
             </div>
-
         </div>
     )
 }
 
 export default Login;
+

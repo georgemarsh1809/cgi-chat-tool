@@ -8,11 +8,9 @@ import Chat from '../components/Chat';
       <div className='container'>
         <Sidebar/>
         <Chat/>
-
       </div>
     </div>
   )
 }
 
- 
 export default Home;

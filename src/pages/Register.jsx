@@ -31,9 +31,11 @@ const Register = () => {
             uploadTask.on(
             
             (error) => {
+                console.error(error)
                 // Handle unsuccessful uploads
                 setErr(true);
             }, 
+            
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
                     await updateProfile(res.user, {
@@ -52,9 +54,9 @@ const Register = () => {
             }
         );
     } catch (err){
+        console.log(err)
         setErr(true);
     };
-
 };
 
 
