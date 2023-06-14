@@ -23,37 +23,67 @@ const Register = () => {
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
 
-            const storageRef = ref(storage, displayName);
+            const storageRef = await ref(storage, displayName);
 
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            //const uploadTask = await uploadBytesResumable(storageRef, file);
 
             //Register three observer
-            uploadTask.on(
+        //     uploadTask.on(
             
-            (error) => {
-                // Handle unsuccessful uploads
-                setErr(true);
-            }, 
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
-                    await updateProfile(res.user, {
-                        displayName,
-                        photoURL:downloadURL
-                    });
-                    await setDoc(doc(db, "users", res.user.uid), {
-                        uid: res.user.uid,
-                        displayName,
-                        email, 
-                        photoURL: downloadURL  
-                    });
-                    await setDoc(doc(db, "userChats", res.user.uid), {});
-                    navigate("/");
+        //     (error) => {
+        //         // Handle unsuccessful uploads
+        //         setErr(true);
+        //         console.log(error)
+        //     }, 
+        //     () => {
+        //         getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
+        //             await updateProfile(res.user, {
+        //                 displayName,
+        //                 photoURL:downloadURL
+        //             });
+        //             await setDoc(doc(db, "users", res.user.uid), {
+        //                 uid: res.user.uid,
+        //                 displayName,
+        //                 email, 
+        //                 photoURL: downloadURL  
+        //             });
+        //             await setDoc(doc(db, "userChats", res.user.uid), {});
+        //             navigate("/");
+        //         });
+        //     }
+        // );
+
+        await uploadBytesResumable(storageRef, file).then(() => {
+            getDownloadURL(storageRef).then(async (downloadURL) => {
+              try {
+                //Update profile
+                await updateProfile(res.user, {
+                  displayName,
+                  photoURL: downloadURL,
                 });
-            }
-        );
-    } catch (err){
+                //create user on firestore
+                await setDoc(doc(db, "users", res.user.uid), {
+                  uid: res.user.uid,
+                  displayName,
+                  email,
+                  photoURL: downloadURL,
+                });
+    
+                //create empty user chats on firestore
+                await setDoc(doc(db, "userChats", res.user.uid), {});
+                navigate("/");
+              } catch (err) {
+                console.log(err);
+                setErr(true);
+                setLoading(false);
+              }
+            });
+          });
+    } catch (error){
         setErr(true);
+        console.log(error)
     };
+
 
 };
 

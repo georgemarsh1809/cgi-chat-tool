@@ -10,14 +10,15 @@ const Login = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        const [[{value: email}], [{value: password}]] = event.target
+        const [{value: email}, {value: password}] = event.target
 
         try {
             await signInWithEmailAndPassword(auth, email, password)
             navigate('/')
             console.log('Logged in')
-        } catch (err) {
+        } catch (error) {
             setErr(true)
+            console.error(error)
         }
     }
 
