@@ -1,11 +1,11 @@
-import { signOut } from 'firebase/auth';
+import { signOut } from 'firebase/auth'
 import React from 'react'
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { auth } from "../firebase";
+import { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
+import { auth } from '../firebase'
 
 const NavBar = () => { 
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext)
 
   return (
     <div className='navbar'>
@@ -19,4 +19,4 @@ const NavBar = () => {
   )
 }
 
-export default NavBar;
+export default NavBar

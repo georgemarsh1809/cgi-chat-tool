@@ -1,0 +1,10 @@
+{
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "[javascriptreact]": {
+    // use eslint to format javascriptreact
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
+}
