@@ -4,14 +4,14 @@ in the npm install if you a load of deprecations or warnings, dont worry. its no
 
 ## fixes
 
-- file attach doesnt work
+-> file attach doesnt work
+-> Can send an empty text message
 
 ## Potential improvements
 
-Chat:
 -> image upload allows any filetype
 -> after image upload does not show any confirmation of image
--> Can send an empty text message
+-> User search requires exact match, could make it fuzzy search
 
 # Getting Started with Create React App
 
