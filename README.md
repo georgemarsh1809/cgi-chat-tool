@@ -1,4 +1,17 @@
-# in the npm install if you a load of deprecations or warnings, dont worry. its normal. as long as there isnt any `critical` ones.
+# notes
+
+in the npm install if you a load of deprecations or warnings, dont worry. its normal. as long as there isnt any `critical` ones.
+
+## fixes
+
+- file attach doesnt work
+
+## Potential improvements
+
+Chat:
+-> image upload allows any filetype
+-> after image upload does not show any confirmation of image
+-> Can send an empty text message
 
 # Getting Started with Create React App
 

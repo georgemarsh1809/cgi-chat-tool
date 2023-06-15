@@ -8,22 +8,20 @@ const Messages = () => {
   const [messages, setMessages] = useState([])
   const { data } = useContext(ChatContext)
 
-
-  useEffect(()=> {
-    const unsub = onSnapshot(doc(db, 'chats', data.chatId), (doc)=>{
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
       doc.exists() && setMessages(doc.data().messages)
     })
 
-    return ()=>{
+    return () => {
       unsub()
     }
   }, [data.chatId])
 
   return (
-    <div className='messages'>
+    <div className="messages">
       {messages.map((m) => (
-        <Message message={m} key={m.id}/>
-
+        <Message message={m} key={m.id} />
       ))}
     </div>
   )

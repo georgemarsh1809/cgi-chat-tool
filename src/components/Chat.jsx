@@ -7,23 +7,21 @@ import Input from './Input'
 import { ChatContext } from '../context/ChatContext'
 
 const Chat = () => {
-
   const { data } = useContext(ChatContext)
 
-
   return (
-    <div className='chat'>
+    <div className="chat">
       <div className="chatInfo">
-        <span style={{fontSize: 20}}>{data.user?.displayName}</span>
+        <span style={{ fontSize: 20 }}>{data.user?.displayName}</span>
         <div className="chatIcons">
           {/*  alt text for screen readers */}
-          <img src={Cam} alt=""/>
-          <img src={Add} alt=""/>
-          <img src={More} alt=""/>
+          <img src={Cam} alt="" />
+          <img src={Add} alt="" />
+          <img src={More} alt="" />
         </div>
       </div>
-      <Messages/>
-      <Input/>
+      <Messages />
+      <Input />
     </div>
   )
 }

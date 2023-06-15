@@ -5,10 +5,10 @@ import Chats from './Chats'
 
 const Sidebar = () => {
   return (
-    <div className='sidebar'>
-      <NavBar/>
-      <Search/>
-      <Chats/>
+    <div className="sidebar">
+      <NavBar />
+      <Search />
+      <Chats />
     </div>
   )
 }
