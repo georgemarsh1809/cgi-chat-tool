@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { ChatContext } from '../context/ChatContext'
 import PropTypes from 'prop-types'
+import styles from './message.module.scss'
 
 const Message = ({ message }) => {
   const { currentUser } = useContext(AuthContext)
@@ -17,9 +18,11 @@ const Message = ({ message }) => {
   return (
     <div
       ref={ref}
-      className={`message ${message.senderId === currentUser.uid && 'owner'}`}
+      className={`${styles.message} ${
+        message.senderId === currentUser.uid && styles.owner
+      }`}
     >
-      <div className="messageInfo">
+      <div className={styles.messageInfo}>
         <img
           src={
             message.senderId === currentUser.uid
@@ -30,7 +33,7 @@ const Message = ({ message }) => {
         />
         <span style={{ fontSize: 11 }}>Just now</span>
       </div>
-      <div className="messageContent">
+      <div className={styles.messageContent}>
         <p>{message.text}</p>
         {message.img && <img src={message.img} alt="" />}
       </div>

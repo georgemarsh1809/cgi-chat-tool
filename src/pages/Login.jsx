@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
+import styles from './form.module.scss'
 
 const Login = () => {
   const [err, setErr] = useState(false)
@@ -22,10 +23,10 @@ const Login = () => {
   }
 
   return (
-    <div className="formContainer">
-      <div className="formWrapper">
-        <span className="logo">CGI Chat Tool</span>
-        <span className="title">Login</span>
+    <div className={styles.formContainer}>
+      <div className={styles.formWrapper}>
+        <span className={styles.logo}>CGI Chat Tool</span>
+        <span className={styles.title}>Login</span>
         <form onSubmit={handleSubmit}>
           <input type="email" placeholder="Email" />
           <input type="password" placeholder="Password" />

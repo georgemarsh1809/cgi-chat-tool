@@ -3,6 +3,7 @@ import { doc, onSnapshot } from 'firebase/firestore'
 import { AuthContext } from '../context/AuthContext'
 import { db } from '../firebase'
 import { ChatContext } from '../context/ChatContext'
+import styles from './chats.module.scss'
 
 const Chats = () => {
   const [chats, setChats] = useState([])
@@ -30,7 +31,7 @@ const Chats = () => {
   )
 
   return (
-    <div className="chats">
+    <div>
       {sortedChats.map((chat) => {
         const [userId, { userInfo, lastMessage }] = chat
 
@@ -38,12 +39,12 @@ const Chats = () => {
 
         return (
           <div
-            className="userChat"
+            className={styles.userChat}
             key={userId}
             onClick={() => handleSelect(userInfo)}
           >
             <img src={photoURL} />
-            <div className="userChatInfo">
+            <div className={styles.userChatInfo}>
               <span>{displayName}</span>
               <p>{lastMessage?.text}</p>
             </div>

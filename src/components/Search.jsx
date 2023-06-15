@@ -12,6 +12,8 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import { AuthContext } from '../context/AuthContext'
+import styles from './search.module.scss'
+import chatsStyles from './chats.module.scss'
 
 const Search = () => {
   const [username, setUsername] = useState('')
@@ -75,8 +77,8 @@ const Search = () => {
   }
 
   return (
-    <div className="search">
-      <div className="searchForm">
+    <div className={styles.search}>
+      <div className={styles.searchForm}>
         <input
           type="text"
           placeholder="Find a user"
@@ -89,9 +91,9 @@ const Search = () => {
       </div>
       {err && <span>User not found</span>}
       {user && (
-        <div className="userChat" onClick={handleSelect}>
+        <div className={chatsStyles.userChat} onClick={handleSelect}>
           <img src={user.photoURL} />
-          <div className="userChatInfo">
+          <div className={chatsStyles.userChatInfo}>
             <span>{user.displayName}</span>
           </div>
         </div>

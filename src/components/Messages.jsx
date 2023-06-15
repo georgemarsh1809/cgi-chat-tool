@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ChatContext } from '../context/ChatContext'
 import { db } from '../firebase'
 import Message from './Message'
+import styles from './messages.module.scss'
 
 const Messages = () => {
   const [messages, setMessages] = useState([])
@@ -17,7 +18,7 @@ const Messages = () => {
   }, [data.chatId])
 
   return (
-    <div className="messages">
+    <div className={styles.messages}>
       {messages.map((message) => (
         <Message message={message} key={message.id} />
       ))}

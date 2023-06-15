@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { doc, setDoc } from 'firebase/firestore'
 import { useNavigate, Link } from 'react-router-dom'
+import styles from './form.module.scss'
 
 const Register = () => {
   const [error, setError] = useState(false)
@@ -65,10 +66,10 @@ const Register = () => {
   }
 
   return (
-    <div className="formContainer">
-      <div className="formWrapper">
-        <span className="logo">CGI Chat Tool</span>
-        <span className="title">Register</span>
+    <div className={styles.formContainer}>
+      <div className={styles.formWrapper}>
+        <span className={styles.logo}>CGI Chat Tool</span>
+        <span className={styles.title}>Register</span>
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Display Name" />
           <input type="email" placeholder="Email" />

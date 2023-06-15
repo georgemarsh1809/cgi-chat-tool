@@ -13,6 +13,7 @@ import {
 import { db, storage } from '../firebase'
 import { v4 as uuid } from 'uuid'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import styles from './input.module.scss'
 
 const Input = () => {
   const [text, setText] = useState('')
@@ -77,14 +78,14 @@ const Input = () => {
   }
 
   return (
-    <div className="input">
+    <div className={styles.input}>
       <input
         type="text"
         placeholder="Type your message..."
         onChange={(event) => setText(event.target.value)}
         value={text}
       />
-      <div className="send">
+      <div className={styles.send}>
         <img src={Attach} alt="attach file" />
         <input
           type="file"

@@ -12,6 +12,11 @@ in the npm install if you a load of deprecations or warnings, dont worry. its no
 -> image upload allows any filetype
 -> after image upload does not show any confirmation of image
 -> User search requires exact match, could make it fuzzy search
+-> input validation for forms
+
+## refactor changes
+
+-> refactor the repeated code in Login and Register into a single form component
 
 # Getting Started with Create React App
 

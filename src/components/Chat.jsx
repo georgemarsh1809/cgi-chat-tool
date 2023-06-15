@@ -5,6 +5,7 @@ import More from '../img/more.png'
 import Messages from './Messages'
 import Input from './Input'
 import { ChatContext } from '../context/ChatContext'
+import styles from './chat.module.scss'
 
 const Chat = () => {
   const {
@@ -12,10 +13,10 @@ const Chat = () => {
   } = useContext(ChatContext)
 
   return (
-    <div className="chat">
-      <div className="chatInfo">
+    <div className={styles.chat}>
+      <div className={styles.chatInfo}>
         <span style={{ fontSize: 20 }}>{user?.displayName}</span>
-        <div className="chatIcons">
+        <div className={styles.chatIcons}>
           {/*  alt text for screen readers */}
           <img src={Cam} alt="" />
           <img src={Add} alt="" />
