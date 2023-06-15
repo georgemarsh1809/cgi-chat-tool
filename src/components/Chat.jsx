@@ -7,12 +7,14 @@ import Input from './Input'
 import { ChatContext } from '../context/ChatContext'
 
 const Chat = () => {
-  const { data } = useContext(ChatContext)
+  const {
+    data: { user },
+  } = useContext(ChatContext)
 
   return (
     <div className="chat">
       <div className="chatInfo">
-        <span style={{ fontSize: 20 }}>{data.user?.displayName}</span>
+        <span style={{ fontSize: 20 }}>{user?.displayName}</span>
         <div className="chatIcons">
           {/*  alt text for screen readers */}
           <img src={Cam} alt="" />

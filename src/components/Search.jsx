@@ -21,18 +21,18 @@ const Search = () => {
   const { currentUser } = useContext(AuthContext)
 
   const handleSearch = async () => {
-    const q = query(
+    // OK, some redundant logic here, but i think you might want to change so will leave for now
+    // search query looks for an exact match of the username
+    // so there will only every be one result
+    // therefore, no need to loop through the results
+    const searchQuery = query(
       collection(db, 'users'),
       where('displayName', '==', username)
     )
 
     try {
-      const querySnapshot = await getDocs(q)
-      console.log(
-        '🚀 ~ file: Search.jsx:31 ~ handleSearch ~ querySnapshot:',
-        querySnapshot
-      )
-      querySnapshot.forEach((doc) => {
+      const searchResults = await getDocs(searchQuery)
+      searchResults.forEach((doc) => {
         setUser(doc.data())
       })
     } catch (error) {
@@ -41,45 +41,33 @@ const Search = () => {
     }
   }
 
-  const handleKey = (e) => {
-    e.code === 'Enter' && handleSearch()
-  }
-
   const handleSelect = async () => {
     //check whether group exists - if not, create
-    const combinedId =
+    const compoundChatIdentifier =
       currentUser.uid > user.uid
         ? currentUser.uid + user.uid
         : user.uid + currentUser.uid
 
-    try {
-      const res = await getDoc(doc(db, 'chats', combinedId))
+    const selectedChat = await getDoc(doc(db, 'chats', compoundChatIdentifier))
 
-      if (!res.exists()) {
-        //create chat in chats collection
-        await setDoc(doc(db, 'chats', combinedId), { messages: [] })
+    if (!selectedChat.exists()) {
+      //create chat in chats collection
+      await setDoc(doc(db, 'chats', compoundChatIdentifier), {
+        messages: [],
+      })
 
-        //create user chats
-        await updateDoc(doc(db, 'userChats', currentUser.uid), {
-          [combinedId + '.userInfo']: {
-            uid: user.uid,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
+      const updateUsersChats = (user, otherUser) =>
+        updateDoc(doc(db, 'userChats', user.uid), {
+          [compoundChatIdentifier + '.userInfo']: {
+            uid: otherUser.uid,
+            displayName: otherUser.displayName,
+            photoURL: otherUser.photoURL,
           },
-          [combinedId + '.date']: serverTimestamp(),
+          [compoundChatIdentifier + '.date']: serverTimestamp(),
         })
 
-        await updateDoc(doc(db, 'userChats', user.uid), {
-          [combinedId + '.userInfo']: {
-            uid: currentUser.uid,
-            displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL,
-          },
-          [combinedId + '.date']: serverTimestamp(),
-        })
-      }
-    } catch (err) {
-      console.error(err)
+      await updateUsersChats(currentUser, user)
+      await updateUsersChats(user, currentUser)
     }
 
     setUser(null)
@@ -92,8 +80,10 @@ const Search = () => {
         <input
           type="text"
           placeholder="Find a user"
-          onKeyDown={handleKey}
-          onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={(event) => {
+            event.code === 'Enter' && handleSearch()
+          }}
+          onChange={(event) => setUsername(event.target.value)}
           value={username}
         />
       </div>

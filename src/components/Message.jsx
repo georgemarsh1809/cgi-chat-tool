@@ -9,9 +9,10 @@ const Message = ({ message }) => {
 
   const ref = useRef()
 
-  useEffect(() => {
-    ref.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [message])
+  useEffect(
+    () => ref.current?.scrollIntoView({ behavior: 'smooth' }),
+    [message]
+  )
 
   return (
     <div
@@ -25,7 +26,7 @@ const Message = ({ message }) => {
               ? currentUser.photoURL
               : data.user.photoURL
           }
-          alt=""
+          alt="The users profile picture"
         />
         <span style={{ fontSize: 11 }}>Just now</span>
       </div>

@@ -12,40 +12,44 @@ const Chats = () => {
 
   useEffect(() => {
     const getChats = () => {
-      const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
+      const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) =>
         setChats(doc.data())
-      })
+      )
 
-      return () => {
-        unsub()
-      }
+      return () => unsub()
     }
 
     currentUser.uid && getChats()
   }, [currentUser.uid])
 
-  const handleSelect = (user) => {
+  const handleSelect = (user) =>
     dispatch({ type: 'CHANGE_USER', payload: user })
-  }
+
+  const sortedChats = Object.entries(chats)?.sort(
+    ([, { date: lastValue }], [, { date: nextValue }]) => nextValue - lastValue
+  )
 
   return (
     <div className="chats">
-      {chats &&
-        Object.entries(chats)
-          ?.sort((a, b) => b[1].date - a[1].date)
-          .map((chat) => (
-            <div
-              className="userChat"
-              key={chat[0]}
-              onClick={() => handleSelect(chat[1].userInfo)}
-            >
-              <img src={chat[1].userInfo.photoURL} />
-              <div className="userChatInfo">
-                <span>{chat[1].userInfo.displayName}</span>
-                <p>{chat[1].lastMessage?.text}</p>
-              </div>
+      {sortedChats.map((chat) => {
+        const [userId, { userInfo, lastMessage }] = chat
+
+        const { photoURL, displayName } = userInfo
+
+        return (
+          <div
+            className="userChat"
+            key={userId}
+            onClick={() => handleSelect(userInfo)}
+          >
+            <img src={photoURL} />
+            <div className="userChatInfo">
+              <span>{displayName}</span>
+              <p>{lastMessage?.text}</p>
             </div>
-          ))}
+          </div>
+        )
+      })}
     </div>
   )
 }

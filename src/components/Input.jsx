@@ -81,19 +81,19 @@ const Input = () => {
       <input
         type="text"
         placeholder="Type your message..."
-        onChange={(e) => setText(e.target.value)}
+        onChange={(event) => setText(event.target.value)}
         value={text}
       />
       <div className="send">
-        <img src={Attach} alt="" />
+        <img src={Attach} alt="attach file" />
         <input
           type="file"
           style={{ display: 'none' }}
           id="file"
-          onChange={(e) => setImg(e.target.files[0])}
+          onChange={(event) => setImg(event.target.files[0])}
         />
         <label htmlFor="file">
-          <img src={Img} alt="" />
+          <img src={Img} alt="attach image" />
         </label>
         <button onClick={handleSend}>Send</button>
       </div>
