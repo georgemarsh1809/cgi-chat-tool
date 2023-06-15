@@ -9,7 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
 
-    const [err, setErr] = useState(false);
+    const [error, setError] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -74,19 +74,16 @@ const Register = () => {
                 navigate("/");
               } catch (err) {
                 console.log(err);
-                setErr(true);
+                setError(true);
                 setLoading(false);
               }
             });
           });
     } catch (error){
-        setErr(true);
+        setError(true);
         console.log(error)
     };
-
-
 };
-
 
 
     return (
@@ -105,7 +102,7 @@ const Register = () => {
                     </label>
 
                     <button>Sign Up</button>
-                    {err && <span>Something went wrong...</span>}
+                    {error && <span>Something went wrong...</span>}
                 </form>
                 <p>Already have an account? <Link to="/login">Login</Link></p>
             </div>
