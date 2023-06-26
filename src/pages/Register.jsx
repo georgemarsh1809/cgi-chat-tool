@@ -103,6 +103,7 @@ const Register = () => {
 
                     <button>Sign Up</button>
                     {error && <span>Something went wrong...</span>}
+                    {}
                 </form>
                 <p>Already have an account? <Link to="/login">Login</Link></p>
             </div>

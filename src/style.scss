@@ -18,14 +18,14 @@
  
 
 .formContainer{
-    background-color: #a7bcff;
+    background-color: #c1666b;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 
     .formWrapper{
-        background-color: white;
+        background-color: #fee9e1;
         padding: 20px 60px;
         border-radius: 10px;
         display: flex;
@@ -35,13 +35,35 @@
 
 
         .logo{
-            color: #5d5b8d;
+            color: #540804;
             font-weight: bold;
             font-size: 24px;
         }
 
+        .emailBox{
+            background-color: #fee9e1;
+        
+        }
+
+        .passwordBox{
+            background-color: #fee9e1;
+        }   
+
+        .bottomText{
+            color: #2e4052;  
+        }
+
+        .form{
+           
+        }
+
+        .signInButton{
+            background-color: #2e4052;
+            border-radius:10px;
+        }
+
         .title{
-            color: #5d5b8d;
+            color: #2e4052;
             font-size: 16px ;
         }
 

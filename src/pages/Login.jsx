@@ -29,15 +29,15 @@ const Login = () => {
             <div className="formWrapper">
                 <span className="logo">CGI Chat Tool</span>
                 <span className="title">Login</span>
-                <form onSubmit={handleSubmit}>
-                    <input type="email" placeholder="Email"/>
-                    <input type="password" placeholder="Password"/>
-                    <button>Sign In</button>
+                <form className="form" onSubmit={handleSubmit}>
+                    <input className="emailBox" type="email" placeholder="Email"/>
+                    <input className="passwordBox" type="password" placeholder="Password"/>
+                    <button className="signInButton">Sign In</button>
                     {err && <span>Something went wrong...</span>}
                 </form>
                 {/* need to escape special characters, for big apps u have a full solution to write your copy and store localisation (changing the text for language requested by the browser) */}
                 {/* `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;` */}
-                <p>You don&apos;t have an account? <Link to="/register">Register</Link></p>
+                <p className="bottomText">Don&apos;t have an account? Register <Link to="/register">here</Link></p>
             </div>
 
         </div>
