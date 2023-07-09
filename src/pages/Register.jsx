@@ -1,115 +1,211 @@
-import React from "react";
-import Add from "../img/addAvatar.png"
-import { createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
-import { auth, db, storage} from "../firebase";
-import { useState } from "react";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
-import { useNavigate, Link } from "react-router-dom";
+import React from 'react'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { auth, db, storage } from '../firebase'
+import { useState } from 'react'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { doc, setDoc } from 'firebase/firestore'
+import { useNavigate, Link } from 'react-router-dom'
+
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  Text,
+} from '@chakra-ui/react'
+import { Link as ReactRouterLink } from 'react-router-dom'
+import * as REGEX from '../constants/regex'
+import styles from './register.module.scss'
 
 const Register = () => {
+  const [loading, setLoading] = useState(false)
+  const [emailAlreadyInUse, setEmailAlreadyInUse] = useState(false)
 
-    const [error, setError] = useState(false);
-    const navigate = useNavigate();
+  //Added in states to hold field values
+  const [displayName, setDisplayName] = useState('')
+  const [displayNameHasBeenTyped, setDisplayNameHasBeenTyped] = useState(false)
+  const [email, setEmail] = useState('')
+  const [emailHasBeenTyped, setEmailHasBeenTyped] = useState(false)
+  const [password, setPassword] = useState('')
+  const [passwordHasBeenTyped, setPasswordHasBeenTyped] = useState(false)
+  const [avatar, setAvatar] = useState(null)
+  const [organisation, setOrganisation] = useState('CGI')
 
-    const handleSubmit = async (e) => {
- 
-        e.preventDefault(); 
-        const displayName = e.target[0].value;
-        const email = e.target[1].value;
-        const password = e.target[2].value;
-        const file = e.target[3].files[0];
-        
-        try {
-            const res = await createUserWithEmailAndPassword(auth, email, password);
+  const navigate = useNavigate()
 
-            const storageRef = await ref(storage, displayName);
+  //Function to handle the registration of a new user
+  const handleRegister = async (event) => {
+    setLoading(true)
+    event.preventDefault()
 
-            //const uploadTask = await uploadBytesResumable(storageRef, file);
+    let newUser
+    try {
+      newUser = await createUserWithEmailAndPassword(auth, email, password)
+    } catch (error) {
+      setEmailAlreadyInUse(true)
+      setLoading(false)
+    }
 
-            //Register three observer
-        //     uploadTask.on(
-            
-        //     (error) => {
-        //         // Handle unsuccessful uploads
-        //         setErr(true);
-        //         console.log(error)
-        //     }, 
-        //     () => {
-        //         getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) => {
-        //             await updateProfile(res.user, {
-        //                 displayName,
-        //                 photoURL:downloadURL
-        //             });
-        //             await setDoc(doc(db, "users", res.user.uid), {
-        //                 uid: res.user.uid,
-        //                 displayName,
-        //                 email, 
-        //                 photoURL: downloadURL  
-        //             });
-        //             await setDoc(doc(db, "userChats", res.user.uid), {});
-        //             navigate("/");
-        //         });
-        //     }
-        // );
+    let avatarUrl
+    if (avatar) {
+      const date = new Date().getTime()
+      const storageRef = ref(storage, `${displayName + date}`)
+      await uploadBytesResumable(storageRef, avatar)
+      avatarUrl = await getDownloadURL(storageRef)
+    }
 
-        await uploadBytesResumable(storageRef, file).then(() => {
-            getDownloadURL(storageRef).then(async (downloadURL) => {
-              try {
-                //Update profile
-                await updateProfile(res.user, {
-                  displayName,
-                  photoURL: downloadURL,
-                });
-                //create user on firestore
-                await setDoc(doc(db, "users", res.user.uid), {
-                  uid: res.user.uid,
-                  displayName,
-                  email,
-                  photoURL: downloadURL,
-                });
-    
-                //create empty user chats on firestore
-                await setDoc(doc(db, "userChats", res.user.uid), {});
-                navigate("/");
-              } catch (err) {
-                console.log(err);
-                setError(true);
-                setLoading(false);
-              }
-            });
-          });
-    } catch (error){
-        setError(true);
-        console.log(error)
-    };
-};
+    await updateProfile(newUser.user, {
+      displayName,
+      ...(avatarUrl ? { photoURL: avatarUrl } : {}),
+    })
 
+    await setDoc(doc(db, 'users', newUser.user.uid), {
+      uid: newUser.user.uid,
+      displayName,
+      email,
+      organisation,
+      ...(avatarUrl ? { photoURL: avatarUrl } : {}),
+    })
 
-    return (
-        <div className="formContainer">
-            <div className="formWrapper">
-                <span className="logo">CGI Chat Tool</span>
-                <span className="title">Register</span>
-                <form onSubmit={handleSubmit}>
-                    <input type="text" placeholder="Display Name"/>
-                    <input type="email" placeholder="Email"/>
-                    <input type="password" placeholder="Password"/>
-                    <input style={{display: "none"}}type="file" id="file"/>
-                    <label htmlFor="file">
-                        <img src={Add} alt=""></img>
-                        <span>Add an avatar</span>
-                    </label>
+    await setDoc(doc(db, 'userChats', newUser.user.uid), {})
+    setLoading(false)
+    navigate('/')
+  }
 
-                    <button>Sign Up</button>
-                    {error && <span>Something went wrong...</span>}
-                    {}
-                </form>
-                <p>Already have an account? <Link to="/login">Login</Link></p>
-            </div>
+  //Ensure both display name and email are valid. EMAIL follows the regular expression defined in the 'constants' folder
+  const emailIsValid = !!String(email).toLowerCase().match(REGEX.EMAIL)
+  const displayNameIsValid = displayName.length > 0
 
-        </div>
-    )
+  //Create password complexity
+  const passwordHasUpperCase = /[A-Z]/.test(password)
+  const passwordHasLowerCase = /[a-z]/.test(password)
+  const passwordHasNumbers = /\d/.test(password)
+  const passwordHasNonalphas = /\W/.test(password)
+
+  const passwordIsValid =
+    password.length >= 8 &&
+    passwordHasNumbers &&
+    passwordHasUpperCase &&
+    passwordHasLowerCase &&
+    passwordHasNonalphas
+
+  //Styling and element placement using ChakraUI and CSS
+  return (
+    <Flex
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      className={styles.register}
+    >
+      <Text fontSize={50} fontWeight="semibold" padding={5}>
+        CrisisConnect
+      </Text>
+      <Text fontSize={25}>Register</Text>
+      <FormControl
+        width={500}
+        direction="column"
+        alignContent="center"
+        justifyContent="center"
+      >
+        <FormLabel marginTop={5}>Display Name*</FormLabel>
+        <Input
+          type="text"
+          placeholder="Display Name"
+          isInvalid={!displayNameIsValid && displayNameHasBeenTyped}
+          border="1px"
+          borderColor="black"
+          onChange={(event) => {
+            setDisplayName(event.target.value)
+            if (!displayNameHasBeenTyped) setDisplayNameHasBeenTyped(true)
+          }}
+        />
+
+        <FormLabel marginTop={5}>Email address*</FormLabel>
+        {emailAlreadyInUse && <Text fontSize="sm">Email already in use</Text>}
+        <Input
+          type="email"
+          placeholder="Email Address"
+          isInvalid={!emailIsValid && emailHasBeenTyped}
+          border="1px"
+          borderColor="black"
+          onChange={(event) => {
+            setEmail(event.target.value)
+            if (!emailHasBeenTyped) setEmailHasBeenTyped(true)
+          }}
+        />
+
+        <FormLabel marginTop={5}>Organisation*</FormLabel>
+        <Select
+          onChange={(event) => setOrganisation(event.target.value)}
+          defaultValue="CGI"
+          border="1px"
+          borderColor="black"
+        >
+          <option value="CGI">CGI</option>
+          <option value="GCI">GCI</option>
+          <option value="NPS">NPS</option>
+          <option value="Courtel">Courtel</option>
+          <option value="CPS">CPS</option>
+        </Select>
+
+        <FormLabel marginTop={5}>Password*</FormLabel>
+        <Text fontSize="sm" fontStyle={'italic'} marginBottom={2}>
+          Must include an uppercase character, a lowercase character, a number,
+          and a special character
+        </Text>
+        <Input
+          type="password"
+          placeholder="Password"
+          isInvalid={!passwordIsValid && passwordHasBeenTyped}
+          border="1px"
+          borderColor="black"
+          onChange={(event) => {
+            setPassword(event.target.value)
+            if (!passwordHasBeenTyped) setPasswordHasBeenTyped(true)
+          }}
+        />
+
+        <FormLabel marginTop={5}>User Avatar (Optional)</FormLabel>
+        <label htmlFor="avatar">
+          {/* <img src={Add} alt=""></img> */}
+          <span>Add an avatar</span>
+        </label>
+        <Input
+          type="file"
+          id="avatar"
+          onChange={(event) => setAvatar(event.target.files[0])}
+          accept="image/*"
+          multiple={false}
+          border="1px"
+          borderColor="black"
+        />
+
+        <Button
+          onClick={handleRegister}
+          isDisabled={loading || !emailIsValid || !passwordIsValid}
+          isLoading={loading}
+          marginTop={5}
+          variant={'solid'}
+          width={500}
+          border="1px"
+          borderColor="black"
+          background={'#8F3442'}
+          color={'#efefef'}
+        >
+          Register
+        </Button>
+
+        <Text marginTop={2}>
+          Already have an account?{' '}
+          <Link to="/login" as={ReactRouterLink}>
+            Login
+          </Link>
+        </Text>
+      </FormControl>
+    </Flex>
+  )
 }
 
-export default Register; 
+export default Register
