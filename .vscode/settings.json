@@ -1,10 +1,16 @@
 {
-  "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "[javascriptreact]": {
-    // use eslint to format javascriptreact
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  }
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "javascriptreact"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "polacode.shadow": "rgba(0, 0, 0, 0.55) 0px 5px 17px",
+  "polacode.target": "container"
 }

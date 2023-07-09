@@ -13,14 +13,18 @@ import PropTypes from 'prop-types'
 const App = () => {
   const { currentUser } = useContext(AuthContext)
 
-  const ProtectedRoute = ({ children }) => !currentUser ? <Navigate to="/login" /> : children
+  const ProtectedRoute = ({ children }) =>
+    !currentUser ? <Navigate to="/login" /> : children
 
+  ProtectedRoute.propTypes = {
+    children: PropTypes.node.isRequired,
+  }
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/">
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
           <Route
             index
             element={
@@ -34,9 +38,5 @@ const App = () => {
     </BrowserRouter>
   )
 }
-
-App.propTypes = {
-  children: PropTypes.node.isRequired,
-} 
 
 export default App

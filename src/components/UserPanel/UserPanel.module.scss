@@ -1,0 +1,46 @@
+.usersScroller {
+  overflow: scroll;
+  width: 100%;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.createGroupIcon {
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+.searchButtonIcon {
+  font-size: 1.4rem;
+  display: flex;
+  justify-content: 'center';
+}
+
+.userCardText {
+  margin-left: 1rem;
+  align-items: 'center';
+  font-weight: 500;
+}
+
+.createGroupButtonContainer {
+  height: 4rem !important;
+  width: 100%;
+  border-radius: 0 !important;
+  position: relative !important;
+  background-color: #374649 !important;
+  color: white !important;
+  i {
+    position: absolute;
+    left: 1rem;
+    font-size: 2rem;
+  }
+  div {
+    height: 4rem;
+  }
+}
+
+.createGroupModal {
+  background-color: #374649 !important;
+  color: white !important;
+}

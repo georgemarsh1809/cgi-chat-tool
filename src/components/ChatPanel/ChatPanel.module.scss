@@ -1,0 +1,33 @@
+.chatTitle {
+  background-color: #4e4e4e;
+  color: #d1d0d0;
+  height: 4rem;
+}
+
+.chatTitleIcon {
+  font-size: 2rem;
+  display: flex;
+}
+
+.lastMessage {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: calc(100%);
+}
+
+.lastMessageContainer {
+  display: grid;
+}
+
+.chatSelected {
+  background-color: #a3a3a3;
+}
+
+.chatsScroller {
+  overflow: scroll;
+  width: 100%;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

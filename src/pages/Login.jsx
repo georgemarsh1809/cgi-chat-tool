@@ -1,47 +1,131 @@
 import React, { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  Link,
+  Text,
+} from '@chakra-ui/react'
+import styles from './login.module.scss'
+import { Link as ReactRouterLink } from 'react-router-dom'
+import * as REGEX from '../constants/regex'
 
 const Login = () => {
+  const navigate = useNavigate()
 
-    const [err, setErr] = useState(false)
-    const navigate = useNavigate()
+  //Added in states to hold field values, along with other state such as 'has the user already attempted login'
+  const [email, setEmail] = useState('')
+  const [emailHasBeenTyped, setEmailHasBeenTyped] = useState(false)
+  const [password, setPassword] = useState('')
+  const [passwordHasBeenTyped, setPasswordHasBeenTyped] = useState(false)
+  const [hasHadFailedLoginAttempt, setHasHadFailedLoginAttempt] =
+    useState(false)
 
-    const handleSubmit = async (event) => {
-        event.preventDefault()
-        const [{value: email}, {value: password}] = event.target
+  //Function to handle the login flow once sign in is pressed - the sign in button only becomes available once both fields are valid
+  const handleLogin = async (event) => {
+    event.preventDefault()
 
-        try {
-            await signInWithEmailAndPassword(auth, email, password)
-            navigate('/')
-            console.log('Logged in')
-        } catch (error) {
-            setErr(true)
-            console.error(error)
-        }
+    try {
+      await signInWithEmailAndPassword(auth, email, password)
+    } catch (error) {
+      setHasHadFailedLoginAttempt(true)
+      return
     }
 
+    navigate('/')
+  }
 
+  //Ensure both email and password are valid before login.
+  const emailIsValid = !!String(email).toLowerCase().match(REGEX.EMAIL)
 
-    return (
-        <div className="formContainer">
-            <div className="formWrapper">
-                <span className="logo">CGI Chat Tool</span>
-                <span className="title">Login</span>
-                <form className="form" onSubmit={handleSubmit}>
-                    <input className="emailBox" type="email" placeholder="Email"/>
-                    <input className="passwordBox" type="password" placeholder="Password"/>
-                    <button className="signInButton">Sign In</button>
-                    {err && <span>Something went wrong...</span>}
-                </form>
-                {/* need to escape special characters, for big apps u have a full solution to write your copy and store localisation (changing the text for language requested by the browser) */}
-                {/* `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;` */}
-                <p className="bottomText">Don&apos;t have an account? Register <Link to="/register">here</Link></p>
-            </div>
+  const passwordIsValid = password.length > 0
 
-        </div>
-    )
+  //Styling and element placement using ChakraUI and CSS
+  return (
+    <Flex
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      className={styles.login}
+    >
+      <Text
+        className={styles.logintitle}
+        fontSize={50}
+        fontWeight="semibold"
+        padding={5}
+      >
+        CrisisConnect
+      </Text>
+      <Text fontSize={25}>Login</Text>
+
+      <FormControl
+        width={500}
+        direction="column"
+        alignContent="center"
+        justifyContent="center"
+      >
+        <FormLabel marginTop={5}>Email Address</FormLabel>
+        <Input
+          type="email"
+          placeholder="Email Address"
+          isInvalid={!emailIsValid && emailHasBeenTyped}
+          border="1px"
+          borderColor="black"
+          onChange={(event) => {
+            setEmail(event.target.value)
+            if (!emailHasBeenTyped) setEmailHasBeenTyped(true)
+          }}
+        />
+
+        <FormLabel marginTop={5}>Password</FormLabel>
+        <Input
+          type="password"
+          width={500}
+          placeholder="Password"
+          isInvalid={!passwordIsValid && passwordHasBeenTyped}
+          border="1px"
+          borderColor="black"
+          onChange={(event) => {
+            setPassword(event.target.value)
+            if (!passwordHasBeenTyped) setPasswordHasBeenTyped(true)
+          }}
+        />
+
+        <Button
+          className={styles.loginButton}
+          onClick={handleLogin}
+          isDisabled={!emailIsValid || !passwordIsValid}
+          marginTop={10}
+          alignContent="center"
+          variant={'solid'}
+          width={500}
+          border="1px"
+          borderColor="black"
+          background={'#8F3442'}
+        >
+          Sign In
+        </Button>
+
+        {hasHadFailedLoginAttempt && (
+          <Text margin={4} fontWeight={'semibold'} align={'center'}>
+            Username or password is incorrect, please try again.
+          </Text>
+        )}
+
+        <Text marginTop={2}>
+          You don&apos;t have an account?{' '}
+          <Link to="/register" as={ReactRouterLink}>
+            Register
+          </Link>
+        </Text>
+      </FormControl>
+    </Flex>
+  )
 }
 
 export default Login
